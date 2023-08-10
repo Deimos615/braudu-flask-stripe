@@ -4,7 +4,6 @@ import pandas as pd
 from flask_session import Session  # pip install Flask-Session
 from company_search import * 
 import stripe
-import boto3
 from datetime import datetime
 
 from  braudu_flagged import * 
@@ -127,7 +126,6 @@ def register():
 @app.route('/home')
 def home():
     loggedin = session.get('loggedin', False)
-    print(loggedin)
     if loggedin:
         token = session.get('token', '')
         return render_template('main.html', token=token, current_user=session.get('user', {}))
