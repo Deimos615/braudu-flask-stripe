@@ -1,0 +1,19 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/braudu/
+file_exists_behavior: OVERWRITE
+hooks:
+  BeforeInstall: 
+    - location: scripts/preinstall
+      timeout: 30
+      runas: root
+  AfterInstall:
+    - location: scripts/install
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: scripts/start
+      timeout: 300
+      runas: ubuntu

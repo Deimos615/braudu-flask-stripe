@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+{% block custom_style %}
+    <style>
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Add this line */
+        }
+
+        .btn-group .btn {
+            margin: 10px 0;
+        }
+
+        .arrow-container {
+            display: flex; /* Add this line */
+            align-items: center; /* Add this line */
+            justify-content: center; /* Add this line */
+            margin-bottom: 20px; /* Add this line */
+        }
+
+        .arrow-left {
+            font-size: 50px;
+            margin: 10px;
+            transform: rotate(45deg);
+        }
+        
+        .arrow-right {
+            font-size: 50px;
+            margin: 10px;
+            transform: rotate(-45deg);
+        }
+
+        .or-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0px 0;
+            gap: 20px;
+        }
+
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="btn-group">
+                    <h1>Do you want to find</h1>
+                    <div class="arrow-container"> <!-- Add this div -->
+                        <span class="arrow-left">&#8595;</span>
+                        <span class="arrow-right">&#8595;</span>
+                    </div>
+                    <div class="or-text">
+                        <!-- <form action="/company" method="GET"> -->
+                            <!-- <button class="btn btn-primary btn-lg" type="button"> -->
+                                <a style="color: white;" class="btn btn-primary btn-lg" href="/company?token={{ current_user.token }}">Company</a>
+                            <!-- </button> -->
+                        <!-- </form> -->
+                        <h1 class="d-inline-block">or</h1>
+                        <!-- <form action="/person" method="GET"> -->
+                            <a style="color: white;" class="btn btn-primary btn-lg" href="/person?token={{ current_user.token }}">Persons</a>
+                        <!-- </form> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

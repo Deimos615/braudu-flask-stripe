@@ -1,0 +1,10 @@
+#!/bin/bash
+cd /home/ubuntu/braudu
+killall --quiet python3
+
+export OTEL_SERVICE_NAME='braudu'
+export OTEL_EXPORTER_OTLP_ENDPOINT='https://ingest.eu0.signalfx.com/v2/trace/otlp'
+export OTEL_RESOURCE_ATTRIBUTES='deployment.environment=prod'
+
+sh /home/ubuntu/start.sh
+nohup splunk-py-trace python3 /home/ubuntu/braudu/flask_app.py > /dev/null 2>&1 &

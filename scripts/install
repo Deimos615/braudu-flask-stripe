@@ -1,0 +1,4 @@
+#!/bin/bash
+cd /home/ubuntu/braudu
+pip install -r requirements.txt
+splunk-py-trace-bootstrap

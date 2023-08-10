@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Company{% endblock %}
+{% block custom_style %}
+    <style>
+        .table-container {
+            flex: 1;
+        }
+
+        .filter-container {
+            flex: 0 0 200px; /* Adjust the width of the filter container as needed */
+        }
+        .filter-container label {
+            display: block;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h1>Company Information</h1>
+
+    <div class="d-flex">
+        <div class="table-container"> 
+            <h2>Results</h2>
+            {% if msg %}
+            <div class="alert-danger p-3">{{ msg }}</div>
+            {% endif %}
+            <form action="/company" method="post">
+                {% if data %}
+                <h3>{{ nb_results_displayed }} companies found {{ time_spent }}</h3>
+                {% endif %}
+                <br><br>
+            </form>
+            <table>
+                {{ data | safe }}
+            </table>
+        </div>
+
+        <div class="filter-container">
+            <h2>Filters</h2>
+            <form action="/company" method="post">
+                {% if industries_active %}
+                <label for="industry">Industry</label>
+                <select id="industry" name="industry" value="{{ industry }}">
+                    {% for item in industries_list %}
+                    <option value="{{ item }}">{{ item }}</option>
+                    {% endfor %}
+                </select>
+                {% endif %}
+                <label for="specialities">Specialities</label>
+                <input type="text" id="specialities" name="specialities" value="{{ specialities }}">
+                <label for="funding-raised">Total funding raised in USD</label>
+                <input type="text" id="funding_raised" name="funding_raised" value="{{ funding_raised }}">
+
+                <label for="last_funding_round">Year of last funding round</label>
+                <select  id="last_funding_round" name="last_funding_round" value="{{ last_funding_round }}">
+                    <option value=""></option>
+                </select>
+
+                <label for="company_size">Total number of employees</label>
+                <select id="company_size" name="company_size"  value="{{ company_size }}">
+                    <option value=""></option>
+                    <option value="1-10">1-10</option>
+                    <option value="11-50">11-50</option>
+                    <option value="51-200">51-200</option>
+                    <option value="201-500">201-500</option>
+                    <option value="501-1000">501-1000</option>
+                    <option value="1001-5000">1001-5000</option>
+                    <option value="5001-10,000">5001-10,000</option>
+                    <option value="10000-500000">10,001+</option>
+                </select>
+
+                <label for="cities">Cities</label>
+                <input type="text" id="cities" name="cities" value="{{ cities }}">
+
+                <label for="country">Country</label>
+                <select id="country" name="country"  value="{{ country }}">
+                </select>
+        
+                <label for="number-results">Number of results to display</label>
+                <input type="text" id="number_results" name="number_results"  value="{{ number_results }}">
+                <br><br>
+                <button type="submit" name="action" value="start">Find companies</button>
+                <br><br>
+                <button type="submit" name="action" value="export">Find persons</button>
+            </form>
+        </div>        
+    </div>
+    <script>
+        fetch('https://restcountries.com/v2/all')
+          .then(response => response.json())
+          .then(data => {
+            const selectElement = document.getElementById('country');
+            data.forEach(country => {
+              const optionElement = document.createElement('option');
+              optionElement.value = country.alpha2Code;
+              optionElement.textContent = country.name;
+              if(country.alpha2Code === "{{ country }}"){
+                optionElement.selected = true;
+                }
+              selectElement.appendChild(optionElement);
+            });
+          });
+          window.onload = function() {
+            var selectElement = document.getElementById("company_size");
+            selectElement.value = "{{ company_size }}";
+          };
+          window.onload = function() {
+            var dropdown = document.getElementById('last_funding_round');
+            var currentYear = new Date().getFullYear();
+        
+            for(var i = currentYear; i >= 1974; i--) {
+                var option = document.createElement('option');
+                option.text = i;
+                option.value = i;
+                dropdown.add(option);
+            }
+        }
+    </script>
+{% endblock %}

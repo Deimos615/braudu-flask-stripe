@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}Person{% endblock %}
+{% block custom_style %}
+    <style>
+        .result-section {
+            display: flex;
+        }
+        .result-section .result {
+            flex: 1;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="result-section">
+        {% if total_rows %}
+            <div class="result">
+                <h3>{{ total_rows }} {{ job_title }}s found {{time_spent}}</h3>
+                    <!-- Result Table -->
+                    {% if result %}
+                    <div class="result">
+                        {{ result|safe }}
+                    </div>
+                {% else %}
+                    <div class="result">
+                        <p>No results found.</p>
+                    </div>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="result">
+                <h3>Your customer list:</h3>
+                <div>
+                    {% if result %}
+                        {{ result|safe }}
+                    {% else %}
+                        <p>No results found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+        
+        <div>
+            <h3>Job Titles:</h3>
+            <form method="POST" action="/person" enctype="multipart/form-data">
+                <input type="text" name="job_title" id="job_title_input" placeholder="Search for leads" value="{{ job_title }}">
+                <br><br>
+                {% if synonyms_filter_active %}
+                <label for="job_title_synonyms">Use job title synonyms:</label>
+                <input type="checkbox" name="use_job_title_synonyms" id="use_job_title_synonyms" value="{{ use_job_title_synonyms }}" {% if use_job_title_synonyms %} checked {% endif %}>
+                <br><br>
+                {% endif %}
+                <label for="results_per_company">Results per company:</label>
+                <input type="range" name="results_per_company" id="results_per_company_input" min="1" max="10" value="{{ results_per_company }}">
+                <span id="results_per_company_value">{{ results_per_company }}</span>
+                <br><br>
+                <input type="submit" value="Start">
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Update the value of the results_per_company_value span element when the slider input is changed
+        const resultsPerCompanyInput = document.getElementById('results_per_company_input');
+        const resultsPerCompanyValue = document.getElementById('results_per_company_value');
+
+        resultsPerCompanyInput.addEventListener('input', function() {
+            resultsPerCompanyValue.textContent = resultsPerCompanyInput.value;
+        });
+
+        // Automatically submit the form when the job title input is changed and Enter is pressed
+        document.getElementById('job_title_input').addEventListener('keydown', function(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.forms[0].submit();
+            }
+        });
+    </script>
+{% endblock %}

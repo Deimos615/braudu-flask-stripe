@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var eventSource = new EventSource('/stream');
+            var table = $('#table-container');
+
+            eventSource.onmessage = function(event) {
+                var htmlTable = event.data;
+                table.html(htmlTable);
+            };
+        });
+    </script>
+</head>
+<body>
+    <div id="table-container"></div>
+</body>
+</html>
